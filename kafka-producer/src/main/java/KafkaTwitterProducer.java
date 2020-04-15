@@ -2,11 +2,13 @@ import config.TwitterConfig;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.json.DataObjectFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +24,18 @@ public class KafkaTwitterProducer {
     public static void main(String args[]) {
     //    public List<Status> execute() {
 
+        Properties kafkaProperties = new Properties();
+        kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"hadoop000:9092");
+        kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class.getName());
+        kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class.getName());
+        kafkaProperties.put(ProducerConfig.ACKS_CONFIG, "all");
+        final Producer kafkaProducer = new KafkaProducer(kafkaProperties);
+
             logger.info("Build Connection");
             ConfigurationBuilder cb = new ConfigurationBuilder();
+            cb.setJSONStoreEnabled(true);
             cb.setDebugEnabled(true)
                     .setOAuthConsumerKey(TwitterConfig.getInstance().getConsumerKey())
                     .setOAuthConsumerSecret(TwitterConfig.getInstance().getConsumerSecret())
@@ -34,14 +46,15 @@ public class KafkaTwitterProducer {
                 .getInstance(); // First you create the Stream
         final List<Status> statuses = new ArrayList<Status>();
         StatusListener listener = new StatusListener() {
-
-
             public void onException(Exception e) {
                 e.printStackTrace();
             }
             public void onStatus(Status status) {
                 statuses.add(status);
+                ProducerRecord data = new ProducerRecord("twitterData", DataObjectFactory.getRawJSON(status));
+                kafkaProducer.send(data);
                 System.out.println("@ ---- "+status.getUser().getScreenName()+"-------"+"----------"+status.getText());
+
             }
             public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
                 System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
@@ -67,14 +80,7 @@ public class KafkaTwitterProducer {
 
 
 
-/*        Properties kafkaProperties = new Properties();
-            kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:8082");
-            kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                    StringSerializer.class.getName());
-            kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                    StringSerializer.class.getName());
-            kafkaProperties.put(ProducerConfig.ACKS_CONFIG, "all");
-            final Producer kafkaProducer = new KafkaProducer(kafkaProperties);*/
+
 
 
         }
