@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.json.DataObjectFactory;
+import utils.TwitterSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,6 @@ public class KafkaTwitterProducer {
 
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaTwitterProducer.class);
-    public static final int NUM_TWEETS = 2000;
-    private final Object lock = new Object();
 
     public static void main(String args[]) {
     //    public List<Status> execute() {
@@ -44,16 +43,15 @@ public class KafkaTwitterProducer {
 
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build())
                 .getInstance(); // First you create the Stream
-        final List<Status> statuses = new ArrayList<Status>();
         StatusListener listener = new StatusListener() {
             public void onException(Exception e) {
                 e.printStackTrace();
             }
             public void onStatus(Status status) {
-                statuses.add(status);
-                ProducerRecord data = new ProducerRecord("twitterData", DataObjectFactory.getRawJSON(status));
+
+                ProducerRecord<String, String> data = new ProducerRecord<String, String>("twitterData", TwitterSerializer.parseStatus(status));
                 kafkaProducer.send(data);
-                System.out.println("@ ---- "+status.getUser().getScreenName()+"-------"+"----------"+status.getText());
+                System.out.println(data.value());
 
             }
             public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
