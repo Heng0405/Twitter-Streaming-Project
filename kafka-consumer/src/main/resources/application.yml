@@ -16,4 +16,4 @@ kafka.bootstrap.servers: hadoop000:9092
 spark.streaming.batch.frequency: 2
 #spark.streaming.concurrentJobs: "20"
 #output.concurrent.writes: "50"
-spark.streaming.twitter.topic: "twitterKafka"
+spark.streaming.twitter.topic: "twitterMessage"

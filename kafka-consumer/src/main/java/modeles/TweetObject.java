@@ -1,8 +1,6 @@
 package modeles;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonValue;
+
 
 import java.util.Date;
 
@@ -11,23 +9,24 @@ public class TweetObject {
 
     public TweetObject(){};
 
-    //@JsonProperty("statusId")
-    private Long statusId;
-    //@JsonProperty("displayName")
-    private String displayName;
-    //@JsonProperty("Date")
-    //@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date date;
-    //@JsonProperty("retweetCount")
-    private int retweetCount;
-    //@JsonProperty("favoriteCount")
-    private int favoriteCount;
-    //@JsonProperty("country")
-    private String country;
-    //@JsonProperty("countryCode")
-    private String countryCode;
-    //@JsonProperty("source")
-    private String source;
+
+    public Long statusId;
+
+    public String displayName;
+
+    public Date date;
+
+    public int retweetCount;
+
+    public int favoriteCount;
+
+    public String country;
+
+    public String countryCode;
+
+    public String source;
+
+    public String tweetText;
 
     public Long getStatusId() {
         return statusId;
@@ -92,8 +91,7 @@ public class TweetObject {
         this.tweetText = tweetText;
     }
 
-    //@JsonProperty("tweetText")
-    private String tweetText;
+
 
 
 

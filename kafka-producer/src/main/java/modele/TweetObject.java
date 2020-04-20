@@ -4,15 +4,88 @@ import java.util.Date;
 
 public class TweetObject {
 
-    private Long statusId;
-    private String displayName;
-    private Date date;
-    private int retweetCount;
-    private int favoriteCount;
-    private String country;
-    private String countryCode;
-    private String source;
-    private String tweetText;
+    public TweetObject(){};
+
+    public Long statusId;
+
+    public String displayName;
+
+    public Date date;
+
+    public int retweetCount;
+
+    public int favoriteCount;
+
+    public String country;
+
+    public String countryCode;
+
+    public String source;
+
+    public String tweetText;
+
+    public Long getStatusId() {
+        return statusId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public int getFavoriteCount() {
+        return favoriteCount;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getTweetText() {
+        return tweetText;
+    }
+
+    @Override
+    public String toString() {
+        return "TweetObject{" +
+                "statusId=" + statusId +
+                ", displayName='" + displayName + '\'' +
+                ", date=" + date +
+                ", retweetCount=" + retweetCount +
+                ", favoriteCount=" + favoriteCount +
+                ", country='" + country + '\'' +
+                ", countryCode='" + countryCode + '\'' +
+                ", source='" + source + '\'' +
+                ", tweetText='" + tweetText + '\'' +
+                '}';
+    }
+
+    public TweetObject(Long statusId, String displayName, Date date, int retweetCount, int favoriteCount, String country, String countryCode, String source, String tweetText) {
+        this.statusId = statusId;
+        this.displayName = displayName;
+        this.date = date;
+        this.retweetCount = retweetCount;
+        this.favoriteCount = favoriteCount;
+        this.country = country;
+        this.countryCode = countryCode;
+        this.source = source;
+        this.tweetText = tweetText;
+    }
 
 
     public void setStatusId(Long statusId) {

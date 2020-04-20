@@ -1,7 +1,6 @@
 package utils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import modele.TweetObject;
 import twitter4j.Status;
 

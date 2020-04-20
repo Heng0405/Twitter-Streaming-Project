@@ -48,7 +48,7 @@ public class KafkaTwitterProducer {
             }
             public void onStatus(Status status) {
                 TweetObject tweetObject = TwitterUtils.parseStatus(status);
-                ProducerRecord<String, TweetObject> data = new ProducerRecord<String, TweetObject>("twitterKafka", tweetObject);
+                ProducerRecord<String, TweetObject> data = new ProducerRecord<String, TweetObject>("twitterMessage", tweetObject);
                 kafkaProducer.send(data);
                 System.out.println(data);
 

@@ -1,11 +1,12 @@
 package utils;
 
+
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import modeles.TweetObject;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Map;
 
 public class TwitterDeserializer implements Deserializer<TweetObject>{

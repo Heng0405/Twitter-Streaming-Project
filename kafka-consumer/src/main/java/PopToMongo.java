@@ -39,7 +39,7 @@ public class PopToMongo {
         kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
 
-        Collection<String> topics = Arrays.asList("twitterKafka");
+        Collection<String> topics = Arrays.asList("twitterMessage");
 
         logger.info("Start Stream");
         JavaInputDStream<ConsumerRecord<String, String>> stream =
@@ -48,14 +48,13 @@ public class PopToMongo {
                         LocationStrategies.PreferConsistent(),
                         ConsumerStrategies.<String, String>Subscribe(topics, kafkaParams)
                 );
-        JavaDStream<Object> streamObject = stream.map(record-> record.value());
 
-        logger.info("Test print les objects-------------------------------------------------------");
-        streamObject.foreachRDD(rdd ->{
+        JavaDStream<String> lines = stream.map(stringStringConsumerRecord -> stringStringConsumerRecord.toString());
+        lines.foreachRDD(rdd-> {
             System.out.println("--- New RDD with " + rdd.partitions().size()
                     + " partitions and " + rdd.count() + " records");
-            rdd.collect().forEach(ele -> System.out.println(ele.toString()));
-        });
+            rdd.collect().forEach(ele -> System.out.println("test------------------"+ele));
+        } );
 
 
         // Start the computation
