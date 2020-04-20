@@ -1,0 +1,19 @@
+ # application config
+application.group.id: POPTOCASS-Direct-Stream-PRO-v1
+
+# spark config
+#spark.executor.heartbeatInterval: 40s
+#spark.streaming.blockInterval: 90ms
+spark.streaming.kafka.consumer.cache.enabled: false
+#spark.streaming.kafka.maxRatePerPartition: 500
+#spark.cassandra.connection.host: 10.230.9.53,10.230.9.83,10.230.8.239,10.230.8.40,10.230.8.200
+#spark.cassandra.connection.keep_alive_ms: 60000
+#spark.task.maxFailures: 1
+
+# spark streaming config
+kafka.bootstrap.servers: hadoop000:9092
+#kafka.schema.registry.url: http://registry.dataplatform.jcdecaux.com
+spark.streaming.batch.frequency: 2
+#spark.streaming.concurrentJobs: "20"
+#output.concurrent.writes: "50"
+spark.streaming.twitter.topic: "twitterKafka"

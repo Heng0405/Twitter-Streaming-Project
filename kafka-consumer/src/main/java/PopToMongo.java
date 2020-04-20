@@ -39,7 +39,7 @@ public class PopToMongo {
         kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
 
-        Collection<String> topics = Arrays.asList("twitterData");
+        Collection<String> topics = Arrays.asList("twitterKafka");
 
         logger.info("Start Stream");
         JavaInputDStream<ConsumerRecord<String, String>> stream =

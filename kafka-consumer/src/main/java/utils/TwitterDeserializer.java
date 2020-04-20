@@ -10,19 +10,6 @@ import java.util.Map;
 
 public class TwitterDeserializer implements Deserializer<TweetObject>{
 
-/*    public static TweetObject deserializeTwitter(String twitterJson) throws ParseException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        TweetObject tweetObject = null;
-        try{
-            tweetObject = mapper.readValue(twitterJson, TweetObject.class);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return tweetObject;
-    }*/
-
-
-
      private ObjectMapper objectMapper;
 
 
