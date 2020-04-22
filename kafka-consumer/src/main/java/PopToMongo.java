@@ -1,5 +1,10 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.Mongo;
+import com.mongodb.util.JSON;
 import modeles.TweetObject;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -32,10 +37,14 @@ public class PopToMongo {
     public static void main(String args[]){
 
         ObjectMapper objectMapper = new ObjectMapper();
+        Mongo mongo = new Mongo("hadoop000",27017);
+        DB db = mongo.getDB("DB_Twitter");
+        DBCollection collection = db.getCollection("TwitterTable");
+
+
         SparkConf conf = new SparkConf().setMaster("local[2]").setAppName("PopToMongo");
         conf.set("spark.serializer", KryoSerializer.class.getName());
         JavaStreamingContext streamingContext = new JavaStreamingContext(conf, Durations.seconds(2));
-        //TwitterDeserializer twitterDeserializer = new TwitterDeserializer();
 
         Map<String, Object> kafkaParams = new HashMap<String, Object>();
         kafkaParams.put("bootstrap.servers", "hadoop000:9092");
@@ -56,6 +65,7 @@ public class PopToMongo {
                 );
 
         JavaDStream<String> lines = stream.map(stringStringConsumerRecord -> stringStringConsumerRecord.value());
+
         lines.foreachRDD(rdd-> {
             System.out.println("--- New RDD with " + rdd.partitions().size()
                     + " partitions and " + rdd.count() + " records" );
@@ -63,6 +73,17 @@ public class PopToMongo {
                 try {
                     TweetObject tweetObject = objectMapper.readValue(ele.getBytes(),TweetObject.class);
                     System.out.println("Name test-----------------"+tweetObject.displayName);
+                    DBObject dbTwitter = (DBObject) JSON.parse(objectMapper.writeValueAsString(tweetObject));
+                    dbTwitter.put("statusId",tweetObject.statusId);
+                    dbTwitter.put("displayName",tweetObject.displayName);
+                    dbTwitter.put("date",tweetObject.date);
+                    dbTwitter.put("retweetCount",tweetObject.retweetCount);
+                    dbTwitter.put("favoriteCount",tweetObject.favoriteCount);
+                    dbTwitter.put("country",tweetObject.country);
+                    dbTwitter.put("countryCode",tweetObject.countryCode);
+                    dbTwitter.put("source",tweetObject.source);
+                    dbTwitter.put("tweetText",tweetObject.tweetText);
+                    collection.insert(dbTwitter);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -75,6 +96,7 @@ public class PopToMongo {
         streamingContext.start();
         try {
             streamingContext.awaitTermination();
+            mongo.close();
             logger.info("Stop the job");
         } catch (InterruptedException e) {
             e.printStackTrace();
