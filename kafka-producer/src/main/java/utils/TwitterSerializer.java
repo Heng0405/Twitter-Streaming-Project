@@ -10,12 +10,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
-import java.util.Map;
-
 public class TwitterSerializer implements Serializer<TweetObject> {
-    private Gson gson;
-    public void configure(Map<String, ?> map, boolean b) {
-        gson = new Gson();
+
+    private ObjectMapper objectMapper;
+
+    public void configure(Map<String, ?> configs, boolean isKey) {
+        objectMapper = new ObjectMapper();
+        DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        objectMapper.setDateFormat(myDateFormat);
     }
 
     public byte[] serialize(String topic, TweetObject data) {
